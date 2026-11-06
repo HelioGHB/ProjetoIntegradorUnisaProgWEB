@@ -24,3 +24,4 @@ class Config:
         self.SESSION_COOKIE_SAMESITE = 'Lax'
         self.SESSION_COOKIE_SECURE = self.APP_ENV == 'production'
         self.MAX_CONTENT_LENGTH = 64 * 1024
+        self.DEMO_MODE = os.getenv('DEMO_MODE', 'false').lower() == 'true'

@@ -1,5 +1,6 @@
 from flask import abort, flash, redirect, render_template, url_for
 from flask_login import current_user, login_required, login_user, logout_user
+from wtforms import SelectChoice
 from sqlalchemy import text
 from sqlalchemy.exc import SQLAlchemyError
 from werkzeug.security import check_password_hash, generate_password_hash
@@ -26,6 +27,13 @@ def mostrar_erros(form):
     for erros in form.errors.values():
         for erro in erros:
             flash(erro, 'danger')
+
+
+def opcoes_tecnicos():
+    consulta = db.select(Usuario).where(Usuario.perfil == 'tecnico', Usuario.ativo.is_(True)).order_by(Usuario.nome)
+    return [SelectChoice('0', 'Não atribuído')] + [
+        SelectChoice(str(usuario.id), usuario.nome) for usuario in db.session.scalars(consulta)
+    ]
 
 
 def register_routes(app):
@@ -89,11 +97,7 @@ def register_routes(app):
     def detalhe_chamado(chamado_id):
         chamado = buscar_chamado(chamado_id)
         atribuicao = AtribuirForm(tecnico_id=chamado.tecnico_id or 0)
-        atribuicao.tecnico_id.choices = [(0, 'Não atribuído')] + [
-            (usuario.id, usuario.nome) for usuario in db.session.scalars(
-                db.select(Usuario).where(Usuario.perfil == 'tecnico', Usuario.ativo.is_(True)).order_by(Usuario.nome)
-            )
-        ]
+        atribuicao.tecnico_id.choices = opcoes_tecnicos()
         return render_template('detalhe_chamado.html', chamado=chamado,
                                atribuicao=atribuicao, atualizacao=AtualizarForm(status=chamado.status),
                                comentario=ComentarioForm())
@@ -105,11 +109,7 @@ def register_routes(app):
             abort(403)
         chamado = buscar_chamado(chamado_id)
         form = AtribuirForm()
-        form.tecnico_id.choices = [(0, 'Não atribuído')] + [
-            (usuario.id, usuario.nome) for usuario in db.session.scalars(
-                db.select(Usuario).where(Usuario.perfil == 'tecnico', Usuario.ativo.is_(True))
-            )
-        ]
+        form.tecnico_id.choices = opcoes_tecnicos()
         if form.validate_on_submit():
             chamado.tecnico_id = form.tecnico_id.data or None
             db.session.commit()

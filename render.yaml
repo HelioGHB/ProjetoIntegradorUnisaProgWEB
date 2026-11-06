@@ -1,0 +1,23 @@
+# Criar este serviço no Render inicia um deploy real.
+# O banco é criado separadamente; confirme plano e custos antes.
+services:
+  - type: web
+    name: sigetec
+    runtime: python
+    plan: free
+    region: virginia
+    autoDeployTrigger: 'off'
+    buildCommand: pip install -r requirements-render.txt
+    startCommand: gunicorn --config gunicorn.conf.py 'sigetec:create_app()'
+    healthCheckPath: /healthz
+    envVars:
+      - key: APP_ENV
+        value: production
+      - key: PYTHON_VERSION
+        value: 3.14.7
+      - key: DATABASE_URL
+        sync: false
+      - key: SECRET_KEY
+        generateValue: true
+      - key: DEMO_MODE
+        value: 'false'

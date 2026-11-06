@@ -43,6 +43,8 @@ def create_app(test_config=None):
         app.config['TRUSTED_HOSTS'] = app.config.get('TRUSTED_HOSTS') or [
             host.strip() for host in os.getenv('TRUSTED_HOSTS', os.getenv('RENDER_EXTERNAL_HOSTNAME', '')).split(',') if host.strip()
         ]
+        if not app.config['SESSION_COOKIE_SECURE']:
+            raise ValueError('Produção exige cookies seguros e HTTPS.')
         if not app.config['TRUSTED_HOSTS'] or app.debug:
             raise ValueError('Produção exige domínio permitido e debug desativado.')
         app.wsgi_app = ProxyFix(app.wsgi_app, x_for=0, x_proto=1, x_host=0, x_port=0, x_prefix=0)
