@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="pt-br">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}SIGETEC{% endblock %}</title>
+    <style>
+        * { box-sizing: border-box; }
+        body { margin: 0; font: 16px/1.5 system-ui, sans-serif; background: #f3f5f9; color: #17243a; }
+        header { background: #164a85; color: white; }
+        nav { max-width: 1000px; margin: auto; padding: 16px 24px; display: flex; flex-wrap: wrap; align-items: center; gap: 16px; }
+        nav a { color: white; } nav form { margin: 0; }
+        main { max-width: 1000px; margin: 32px auto; padding: 0 24px; }
+        .card { background: white; border: 1px solid #d9e1eb; border-radius: 8px; padding: 24px; margin-bottom: 20px; }
+        h1 { font-size: 1.8rem; } h2 { font-size: 1.3rem; }
+        a { color: #164a85; } .button, button { display: inline-block; border: 0; border-radius: 5px; padding: 10px 16px; background: #164a85; color: white; text-decoration: none; cursor: pointer; font: inherit; }
+        nav button { background: white; color: #164a85; padding: 5px 12px; }
+        label { display: block; margin: 14px 0 5px; font-weight: 600; }
+        input, select, textarea { width: 100%; padding: 10px; border: 1px solid #9aa9bc; border-radius: 5px; font: inherit; }
+        textarea { min-height: 130px; resize: vertical; } form > button { margin-top: 16px; }
+        .alert { padding: 14px; border-radius: 5px; margin-bottom: 16px; background: #e5edf8; }
+        .danger, .error { color: #8f1724; } .success { color: #1c623a; }
+        .muted { color: #526176; } .narrow { max-width: 480px; margin: auto; }
+        .table-wrap { overflow-x: auto; } table { width: 100%; border-collapse: collapse; }
+        th, td { text-align: left; padding: 12px 8px; border-bottom: 1px solid #d9e1eb; }
+        .preserve { white-space: pre-wrap; overflow-wrap: anywhere; } .actions { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; }
+        footer { text-align: center; padding: 24px; color: #526176; }
+    </style>
+</head>
+<body>
+<header><nav aria-label="Navegação principal">
+    <a href="{{ url_for('inicio') }}"><strong>SIGETEC</strong></a>
+    {% block navigation %}{% endblock %}
+</nav></header>
+<main>
+    {% for category, message in get_flashed_messages(with_categories=true) %}
+    <div class="alert {{ category }}" role="alert">{{ message }}</div>
+    {% endfor %}
+    {% block content %}{% endblock %}
+</main>
+<footer>Projeto Integrador · ADS / UNISA</footer>
+</body>
+</html>
