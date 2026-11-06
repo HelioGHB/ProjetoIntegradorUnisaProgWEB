@@ -33,9 +33,11 @@ integração Render associados ao commit publicado. Publicar código no GitHub
 não cria automaticamente uma aplicação acessível pelo navegador.
 
 O deploy requer um serviço Render conectado e PostgreSQL hospedado configurado.
-Ainda não houve deploy. Não é possível registrar retrospectivamente um deploy
-para fases que não foram publicadas. Depois da primeira publicação, a rotina
-para cada nova fase será:
+O responsável informou posteriormente o serviço **sigetec-unisa** como Live,
+em https://sigetec-unisa.onrender.com. A consulta anterior ao GitHub representa
+apenas o momento anterior a essa implantação. Não houve inicialização remota
+do PostgreSQL durante a preparação do novo procedimento sem Shell.
+Para cada nova fase, a rotina será:
 
 1. Implementar uma parte pequena e testá-la.
 2. Criar commit com fase, mudança e validação.
@@ -43,6 +45,21 @@ para cada nova fase será:
 4. Executar deploy manual no Render e testar pelo navegador.
 5. Registrar URL e resultado real da implantação.
 
-O envio do código foi autorizado e concluído. A implantação permanece pendente
-de conexão ao Render e configuração de um banco novo de demonstração.
+O envio do código foi autorizado. O serviço já está publicado, segundo o
+responsável; a execução da inicialização e a confirmação de acesso ao PostgreSQL
+hospedado continuam pendentes.
 A criação de recursos pagos depende de escolha explícita de plano e custos.
+
+
+## Inicialização segura do PostgreSQL hospedado
+
+Foi preparada uma etapa opcional no Start Command, sem Shell ou mudança de
+plano, para criar tabelas e o primeiro administrador por variáveis privadas.
+As flags ficam desativadas por padrão e devem ser desligadas após o sucesso.
+Também foi acrescentado `criar-admin` para uso interativo com acesso seguro ao
+banco remoto. Veja `docs/inicializacao-render.md` para executar e verificar.
+
+Validação desta atualização: 51 testes pytest aprovados e verificação adicional
+em PostgreSQL temporário, incluindo preservação de senha, rollback de DDL e
+duas inicializações simultâneas sem duplicar o administrador. Nenhum banco
+hospedado foi acessado e nenhum plano foi alterado.

@@ -2,13 +2,13 @@
 # O banco é criado separadamente; confirme plano e custos antes.
 services:
   - type: web
-    name: sigetec
+    name: sigetec-unisa
     runtime: python
     plan: free
     region: virginia
     autoDeployTrigger: 'off'
     buildCommand: pip install -r requirements-render.txt
-    startCommand: gunicorn --config gunicorn.conf.py 'sigetec:create_app()'
+    startCommand: python -m flask --app app inicializar-deploy && gunicorn --config gunicorn.conf.py 'sigetec:create_app()'
     healthCheckPath: /healthz
     envVars:
       - key: APP_ENV
@@ -20,4 +20,8 @@ services:
       - key: SECRET_KEY
         generateValue: true
       - key: DEMO_MODE
+        value: 'false'
+      - key: INIT_DB_ON_START
+        value: 'false'
+      - key: CREATE_ADMIN_ON_START
         value: 'false'

@@ -4,6 +4,15 @@ A aplicação roda localmente com SQLite. No Render, utiliza PostgreSQL para
 preservar dados entre reinícios. O serviço Flask é executado pelo Gunicorn.
 Não é necessário Docker nem GitHub Pages.
 
+## Serviço existente e inicialização sem Shell
+
+O responsável informou o deploy Live de **sigetec-unisa**, em
+https://sigetec-unisa.onrender.com. Para inicializar o PostgreSQL desse serviço,
+use o [guia de inicialização sem Shell](inicializacao-render.md), que utiliza o
+Start Command com habilitação explícita por variáveis privadas. Não recrie o
+serviço existente e não altere seu plano. As instruções de criação abaixo são
+apenas referência para instalações novas.
+
 ## Antes de começar
 
 - Código enviado ao [repositório do projeto](https://github.com/HelioGHB/ProjetoIntegradorUnisaProgWEB).
@@ -77,7 +86,7 @@ No Render, crie **Web Service**, conecte o repositório e configure:
 | Runtime | Python 3 |
 | Região | Mesma do banco |
 | Build | `pip install -r requirements-render.txt` |
-| Start | `gunicorn --config gunicorn.conf.py 'sigetec:create_app()'` |
+| Start | `python -m flask --app app inicializar-deploy && gunicorn --config gunicorn.conf.py 'sigetec:create_app()'` |
 | Health Check | `/healthz` |
 | Auto-Deploy | Off |
 
@@ -100,7 +109,8 @@ protocolo encaminhado; não se confia em Host ou IP encaminhados pelo cliente.
 Esta configuração pressupõe hospedagem atrás de proxy confiável, como o Render.
 
 O health check só responde 200 após conexão e acesso à tabela de usuários.
-Prepare o banco **antes do primeiro deploy**, senão ele responderá 503.
+Prepare o banco pela conexão externa ou pela inicialização opcional antes do
+Gunicorn, descrita no guia. Sem tabelas, ele responderá 503.
 Criar o serviço/Blueprint já inicia a primeira implantação; não basta o código
 estar no GitHub. Depois, faça deploy manual para cada nova fase publicada.
 

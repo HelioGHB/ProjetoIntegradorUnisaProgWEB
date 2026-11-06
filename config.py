@@ -25,3 +25,9 @@ class Config:
         self.SESSION_COOKIE_SECURE = self.APP_ENV == 'production'
         self.MAX_CONTENT_LENGTH = 64 * 1024
         self.DEMO_MODE = os.getenv('DEMO_MODE', 'false').lower() == 'true'
+
+        self.INIT_DB_ON_START = os.getenv('INIT_DB_ON_START', 'false').lower() == 'true'
+        self.CREATE_ADMIN_ON_START = os.getenv('CREATE_ADMIN_ON_START', 'false').lower() == 'true'
+        self.BOOTSTRAP_ADMIN_NAME = os.getenv('BOOTSTRAP_ADMIN_NAME')
+        self.BOOTSTRAP_ADMIN_EMAIL = os.getenv('BOOTSTRAP_ADMIN_EMAIL')
+        self.BOOTSTRAP_ADMIN_PASSWORD = os.getenv('BOOTSTRAP_ADMIN_PASSWORD')

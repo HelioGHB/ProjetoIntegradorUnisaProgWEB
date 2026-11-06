@@ -172,6 +172,27 @@ Verificação realizada em 6/11/2026:
 Esses testes não acessaram bancos anteriores nem PostgreSQL hospedado.
 Windows/macOS e deploy no Render ainda não foram executados.
 
+## PostgreSQL do Render: inicialização sem Shell
+
+O serviço **sigetec-unisa** já está Live, conforme informado pelo responsável:
+https://sigetec-unisa.onrender.com
+
+A inicialização de tabelas é uma etapa separada do deploy. Para o plano gratuito,
+o comando opcional `inicializar-deploy` executa antes do Gunicorn, com flags
+privadas desativadas por padrão. Pode criar as três tabelas e somente o primeiro
+administrador, sem apagar dados ou redefinir senhas. Não existe rota pública
+de inicialização.
+
+Siga o [passo a passo de inicialização no Render](docs/inicializacao-render.md).
+O guia mostra as variáveis temporárias, o novo Start Command, como conferir
+`/healthz` e o login, e como desativar a inicialização após o primeiro sucesso.
+Não é preciso mudar o plano ou usar um Shell pago. O comando interativo
+`criar-admin` também foi adicionado para a alternativa de conexão local segura.
+Nesta atualização, **51 testes passaram**, e uma validação adicional num
+PostgreSQL temporário confirmou transação, rollback e concorrência. Não houve
+inicialização no PostgreSQL hospedado durante a preparação.
+As contas locais de demonstração e seu procedimento continuam disponíveis.
+
 ## GitHub, fases e hospedagem
 
 As entregas são separadas por commits com descrição da fase e da validação.
