@@ -1,0 +1,5 @@
+{% macro campo(field) %}
+    {{ field.label }}
+    {{ field() }}
+    {% for error in field.errors %}<p class="error" role="alert">{{ error }}</p>{% endfor %}
+{% endmacro %}

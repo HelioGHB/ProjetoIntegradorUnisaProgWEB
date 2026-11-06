@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+{% from 'campos.html' import campo %}
+{% block title %}Chamado #{{ chamado.id }} · SIGETEC{% endblock %}
+{% block content %}
+<section class="card">
+    <a href="{{ url_for('chamados') }}">Voltar aos chamados</a>
+    <h1>#{{ chamado.id }} · {{ chamado.titulo }}</h1>
+    <p>Situação: <strong>{{ chamado.status.replace('_', ' ') }}</strong> · Prioridade: {{ chamado.prioridade }}</p>
+    <p>Solicitante: {{ chamado.solicitante.nome }} · Técnico: {{ chamado.tecnico.nome if chamado.tecnico else 'Não atribuído' }}</p>
+    <p class="muted">Criado em {{ chamado.criado_em.strftime('%d/%m/%Y %H:%M') }} UTC</p>
+    <p class="preserve">{{ chamado.descricao }}</p>
+</section>
+{% if current_user.perfil == 'administrador' %}
+<section class="card">
+    <h2>Atribuir técnico</h2>
+    <form method="post" action="{{ url_for('atribuir_chamado', chamado_id=chamado.id) }}">
+        {{ atribuicao.hidden_tag() }}{{ campo(atribuicao.tecnico_id) }}
+        <button type="submit">Salvar responsável</button>
+    </form>
+</section>
+{% endif %}
+{% if current_user.perfil in ('administrador', 'tecnico') %}
+<section class="card">
+    <h2>Atualizar atendimento</h2>
+    <form method="post" action="{{ url_for('atualizar_chamado', chamado_id=chamado.id) }}">
+        {{ atualizacao.hidden_tag() }}{{ campo(atualizacao.status) }}
+        <button type="submit">Salvar situação</button>
+    </form>
+</section>
+{% endif %}
+<section class="card">
+    <h2>Comentários e solução</h2>
+    {% for item in chamado.comentarios %}
+    <article>
+        <p><strong>{{ item.usuario.nome }}</strong> · {{ item.criado_em.strftime('%d/%m/%Y %H:%M') }} UTC</p>
+        <p class="preserve">{{ item.conteudo }}</p>
+        <hr>
+    </article>
+    {% else %}<p>Nenhum comentário registrado.</p>{% endfor %}
+    <form method="post" action="{{ url_for('comentar_chamado', chamado_id=chamado.id) }}">
+        {{ comentario.hidden_tag() }}{{ campo(comentario.conteudo) }}
+        <button type="submit">Enviar comentário</button>
+    </form>
+</section>
+{% endblock %}

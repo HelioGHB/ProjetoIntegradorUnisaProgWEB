@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% from 'campos.html' import campo %}
+{% block title %}Entrar · SIGETEC{% endblock %}
+{% block content %}
+<section class="card narrow">
+    <h1>Entrar no SIGETEC</h1>
+    <form method="post">
+        {{ form.hidden_tag() }}
+        {{ campo(form.email) }}
+        {{ campo(form.senha) }}
+        <button type="submit">Entrar</button>
+    </form>
+</section>
+{% endblock %}

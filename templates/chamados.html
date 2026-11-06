@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{% block title %}Chamados · SIGETEC{% endblock %}
+{% block content %}
+<section class="card">
+    <div class="actions"><h1>Chamados</h1>
+    {% if current_user.perfil == 'solicitante' %}<a class="button" href="{{ url_for('novo_chamado') }}">Abrir chamado</a>{% endif %}</div>
+    {% if chamados %}
+    <div class="table-wrap"><table>
+        <thead><tr><th>Número</th><th>Título</th><th>Prioridade</th><th>Situação</th><th>Técnico</th></tr></thead>
+        <tbody>{% for chamado in chamados %}<tr>
+            <td>#{{ chamado.id }}</td>
+            <td><a href="{{ url_for('detalhe_chamado', chamado_id=chamado.id) }}">{{ chamado.titulo }}</a></td>
+            <td>{{ chamado.prioridade }}</td><td>{{ chamado.status.replace('_', ' ') }}</td>
+            <td>{{ chamado.tecnico.nome if chamado.tecnico else 'Não atribuído' }}</td>
+        </tr>{% endfor %}</tbody>
+    </table></div>
+    {% else %}<p>Nenhum chamado disponível para seu perfil.</p>{% endif %}
+</section>
+{% endblock %}
