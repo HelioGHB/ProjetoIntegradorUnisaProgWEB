@@ -23,8 +23,8 @@ Windows/macOS, mas os comandos de ativação correspondentes estão abaixo.
    python -m venv .venv
    ```
 
-   O clone exige que os commits já tenham sido publicados; se recebeu o projeto
-   em ZIP, extraia-o e abra o terminal na pasta que contém `app.py`.
+   O código está publicado na branch `main`. Se recebeu o projeto em ZIP,
+   extraia-o e abra o terminal na pasta que contém `app.py`.
    Se `python` não existir no Linux/macOS, use `python3` para criar o ambiente.
    No Windows, também é possível usar `py -3 -m venv .venv`.
 
