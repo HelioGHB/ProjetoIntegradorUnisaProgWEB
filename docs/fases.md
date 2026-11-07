@@ -1,86 +1,69 @@
-# Fases do desenvolvimento
+# Fases e evidências de evolução do SIGETEC
 
-O reinício foi autorizado pelo responsável pelo projeto. O código anterior foi
-retirado da aplicação e guardado temporariamente fora do repositório para
-recuperação. Credenciais, ambiente virtual e bancos existentes foram preservados.
+O reinício simplificado foi autorizado pelo responsável. Código anterior foi
+guardado temporariamente para recuperação; credenciais e bancos anteriores
+foram preservados. O histórico abaixo descreve commits reais.
 
-Cada fase abaixo corresponde a um commit real, sem reconstruir um histórico
-fictício. Como não havia identidade Git configurada, os commits usam a autoria
-técnica **SIGETEC <sigetec@example.com>**, e não uma identidade pessoal presumida.
-O responsável poderá configurar sua autoria para os próximos commits.
-
-| Fase | Entrega | Verificação |
+| Entrega | Commit | Resultado e validação |
 | --- | --- | --- |
-| 1 — Base (`f88dd9c`) | Fábrica Flask, página inicial, CSS local e instruções de instalação | Página inicial HTTP 200 |
-| 2 — Atendimento básico (`704bc19`) | Login, três perfis, chamados, atribuição, status e comentários | Login e abertura de chamado em SQLite em memória |
-| 3 — Entrega (`619a3db`) | Testes automatizados, instalação reproduzível, guia do professor e configuração Render | 36 testes aprovados em instalação limpa e fluxo HTTP real validado |
+| Fase 1 — Base local | `f88dd9c` | Fábrica Flask, página inicial e CSS local; HTTP 200 |
+| Fase 2 — Atendimento básico | `704bc19` | Três perfis, login, SQLite, chamados, atribuição, status e comentários; fluxo isolado verificado |
+| Fase 3 — Entrega executável | `619a3db` | Instruções para execução local, testes e Render; 36 testes aprovados em instalação limpa |
+| Publicação do histórico no GitHub | `400e849` | Código enviado à `main`, preservando os commits anteriores |
+| Inicialização sem Shell | `bfeb1c6` | Bootstrap opcional e primeiro administrador; 51 testes e PostgreSQL temporário para transação, rollback e concorrência |
+| Fase 4 — Administração de usuários | `bbb5549` | Cadastro e ativação/desativação de técnicos/solicitantes; 69 testes, sem alteração de esquema |
+| Entrega de apresentação | Histórico atual da `main` | Roteiro, README consolidado, três screenshots reais e relatório de validação |
 
-## Publicação e deploy
+Os commits iniciais usam a autoria técnica **SIGETEC <sigetec@example.com>**,
+pois não havia identidade pessoal configurada. Não foi presumida uma identidade
+pessoal para publicar o trabalho. Essa autoria pode ser configurada pelo
+responsável para os próximos commits, sem reescrever o histórico existente.
 
-O remoto configurado é:
-https://github.com/HelioGHB/ProjetoIntegradorUnisaProgWEB.git
+## Publicação e execução
 
-Em 6 de novembro de 2026, os três commits foram publicados com sucesso na
-branch `main`, usando a autenticação do GitHub CLI. As tentativas anteriores
-pela sessão do VS Code falharam; a nova publicação preservou os três commits
-separados e não utilizou force push.
+- Repositório: https://github.com/HelioGHB/ProjetoIntegradorUnisaProgWEB
+- Histórico: https://github.com/HelioGHB/ProjetoIntegradorUnisaProgWEB/commits/main/
+- Serviço: `sigetec-unisa`, em https://sigetec-unisa.onrender.com.
+- PostgreSQL separado do serviço web, na mesma região.
 
-O histórico está disponível em:
-https://github.com/HelioGHB/ProjetoIntegradorUnisaProgWEB/commits/main/
+Em 6/11/2026, os commits foram publicados usando autenticação do GitHub CLI,
+após falha da autenticação do VS Code. Os logs do Render confirmaram a criação
+das tabelas e do administrador nessa data; uma execução posterior preservou a
+senha existente.
 
-A consulta ao GitHub após o envio não encontrou deployments ou status de
-integração Render associados ao commit publicado. Publicar código no GitHub
-não cria automaticamente uma aplicação acessível pelo navegador.
+Em 7/11/2026, o responsável concluiu o deploy manual da fase 4. O Render
+confirmou o commit `bbb5549` Live, e `/healthz` e `/login` responderam HTTP 200.
+A rota `/usuarios`, sem sessão, encaminhou ao login. O responsável cadastrou
+as contas fictícias e relatou sucesso no ciclo completo de atendimento.
+A consulta SQL direta pelo MCP foi bloqueada pela allowlist externa vazia;
+a política foi preservada, sem ampliar acesso ao banco.
 
-O deploy requer um serviço Render conectado e PostgreSQL hospedado configurado.
-O responsável informou posteriormente o serviço **sigetec-unisa** como Live,
-em https://sigetec-unisa.onrender.com. A consulta anterior ao GitHub representa
-apenas o momento anterior a essa implantação. Não houve inicialização remota
-do PostgreSQL durante a preparação do novo procedimento sem Shell.
-Para cada nova fase, a rotina será:
+O Blueprint tem Auto-Deploy Off como referência para novas instalações. O
+serviço existente indicou automático por commit, mas não iniciou sozinho o
+build da fase 4. A causa não foi comprovada; a atualização manual resolveu a
+publicação. Não se deve apresentar o campo Auto-Deploy como prova de deploy.
 
-1. Implementar uma parte pequena e testá-la.
-2. Criar commit com fase, mudança e validação.
-3. Enviar ao GitHub, preservando o histórico.
-4. Executar deploy manual no Render e testar pelo navegador.
-5. Registrar URL e resultado real da implantação.
+## Entrega de documentação e imagens
 
-O envio do código foi autorizado. O serviço já está publicado, segundo o
-responsável; a execução da inicialização e a confirmação de acesso ao PostgreSQL
-hospedado continuam pendentes.
-A criação de recursos pagos depende de escolha explícita de plano e custos.
+As capturas foram feitas em Chromium com o código real, SQLite temporário e
+dados fictícios, sem usar contas reais ou alterar o PostgreSQL hospedado.
+O script de captura fica versionado em `scripts/capturar_telas.py`.
+A suíte de 69 testes foi executada novamente nesta entrega.
 
+Como a inicialização e o login já haviam sido validados, as flags de bootstrap
+foram desativadas e seus três valores temporários foram esvaziados por atualização
+parcial das variáveis. `SECRET_KEY`, `DATABASE_URL`, `APP_ENV` e as demais
+configurações foram preservadas. O redeploy de configuração foi confirmado
+Live, sem alteração de planos ou dados. A conclusão está em `docs/entrega.md`.
 
-## Inicialização segura do PostgreSQL hospedado
+## Rotina para uma próxima fase
 
-Foi preparada uma etapa opcional no Start Command, sem Shell ou mudança de
-plano, para criar tabelas e o primeiro administrador por variáveis privadas.
-As flags ficam desativadas por padrão e devem ser desligadas após o sucesso.
-Também foi acrescentado `criar-admin` para uso interativo com acesso seguro ao
-banco remoto. Veja `docs/inicializacao-render.md` para executar e verificar.
+1. Definir uma parte pequena dentro do escopo acadêmico.
+2. Implementar e testar em ambiente isolado.
+3. Criar commit com mudança e validação; enviar sem force push.
+4. Confirmar se há deploy automático real ou executar o procedimento manual.
+5. Verificar o commit Live, saúde HTTP e o comportamento entregue.
 
-Validação desta atualização: 51 testes pytest aprovados e verificação adicional
-em PostgreSQL temporário, incluindo preservação de senha, rollback de DDL e
-duas inicializações simultâneas sem duplicar o administrador. Nenhum banco
-hospedado foi acessado e nenhum plano foi alterado.
-
-
-## Fase 4 — Administração de usuários
-
-Cadastro de técnicos e solicitantes pelo administrador em `/usuarios`, com
-confirmação de senha e recusa de e-mail duplicado. A listagem permite ativar e
-desativar contas sem excluir chamados ou comentários. Contas administrativas
-não podem ser bloqueadas nem criadas por esse formulário. As regras são
-verificadas no servidor e os formulários mantêm proteção CSRF.
-
-Não houve alteração de tabelas ou necessidade de migração nesta fase.
-Na retomada de 7/11/2026, o Render confirmou deploy Live do commit `bfeb1c6`.
-Os logs registraram tabelas e administrador criados em 6/11, com uma execução
-posterior preservando a senha. A consulta SQL direta pelo MCP foi bloqueada
-pela política de acesso externo do banco; essa política não foi modificada.
-O serviço real tem deploy automático por commit habilitado, diferentemente
-do padrão Off descrito no Blueprint para novas instalações.
-
-Validação da fase 4 em 7/11/2026: 69 testes pytest aprovados. Não houve acesso
-a credenciais, alteração de plano, ampliação da allowlist ou mudança de esquema.
-A verificação do deploy é registrada após a publicação, separadamente dos testes.
+Alterações exclusivamente de documentação podem usar `[skip render]` na mensagem
+do commit para evitar um rebuild sem mudança funcional. Serviços pagos,
+operações destrutivas ou mudanças de escopo exigem decisão explícita.

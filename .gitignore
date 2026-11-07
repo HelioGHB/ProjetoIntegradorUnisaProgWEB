@@ -22,3 +22,6 @@ instance/
 .codex/
 .DS_Store
 entrega/
+
+# Registro local de continuidade, fora da entrega pública
+RETOMADA.md

@@ -3,6 +3,12 @@
 Serviço informado pelo responsável: **sigetec-unisa**, já com status Live.
 URL: https://sigetec-unisa.onrender.com
 
+**Estado atual:** a inicialização e o primeiro login já foram concluídos e
+validados. As flags foram desativadas e os três valores temporários de cadastro
+foram esvaziados na entrega de 7/11/2026, preservando os dados e credenciais
+principais. Este guia é referência para uma instalação nova ou recuperação
+planejada; não repita o procedimento para usar o sistema já publicado.
+
 O plano gratuito não disponibiliza Shell/SSH, tarefas avulsas ou comando de
 pré-deploy pago. Usaremos o **Start Command do serviço existente**, sem criar
 outro serviço, alterar plano ou abrir uma rota pública de administração.
@@ -189,16 +195,19 @@ e `CREATE_ADMIN_ON_START` não são necessárias nesta alternativa interativa.
 
 ## Validação e limites desta entrega
 
-A suíte pytest executou **51 testes aprovados** em SQLite exclusivamente em
-memória, sem usar o PostgreSQL hospedado. Cobrem o primeiro cadastro, repetição, preservação de
+A entrega original do bootstrap executou 51 testes. A suíte atual executou
+**69 testes aprovados**, em SQLite exclusivamente em memória, sem usar o
+PostgreSQL hospedado. Cobrem o primeiro cadastro, repetição, preservação de
 senhas/contas inativas, conflito de e-mail, esquema incompatível, flags
 desativadas e falhas sem exposição de credenciais.
 Também foram verificados num PostgreSQL temporário isolado a criação,
 persistência, repetição sem redefinir senha, rollback completo de DDL após
 falha simulada e duas inicializações simultâneas criando um único administrador.
 Esse servidor de teste foi encerrado; nenhum banco existente foi acessado.
-A inicialização no PostgreSQL hospedado ainda precisa ser executada e validada. Publicar o código na `main` não comprova que a
-inicialização já foi executada no Render.
+A inicialização hospedada foi posteriormente confirmada pelos logs do Render e
+pelo login e roteiro de atendimento validados pelo responsável. O deploy e a
+saúde HTTP também foram verificados. O registro atual está em `docs/entrega.md`.
+Publicar código na `main`, isoladamente, não comprova uma inicialização.
 
 Referências oficiais:
 [limitações do plano gratuito](https://render.com/docs/free),

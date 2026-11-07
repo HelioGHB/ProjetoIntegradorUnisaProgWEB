@@ -1,131 +1,106 @@
-# Publicação simples no Render
+# Operação do SIGETEC no Render
 
-A aplicação roda localmente com SQLite. No Render, utiliza PostgreSQL para
-preservar dados entre reinícios. O serviço Flask é executado pelo Gunicorn.
-Não é necessário Docker nem GitHub Pages.
+## Instalação atual
 
-## Serviço existente e inicialização sem Shell
+- Serviço existente: **sigetec-unisa**.
+- URL: https://sigetec-unisa.onrender.com.
+- Fonte: branch `main` de https://github.com/HelioGHB/ProjetoIntegradorUnisaProgWEB.
+- Execução: Flask/Gunicorn, com PostgreSQL hospedado separado, na mesma região.
+- Planos existentes preservados; nenhum serviço adicional é necessário.
+- Banco e contas já inicializados. O responsável validou o atendimento online.
 
-O responsável informou o deploy Live de **sigetec-unisa**, em
-https://sigetec-unisa.onrender.com. Para inicializar o PostgreSQL desse serviço,
-use o [guia de inicialização sem Shell](inicializacao-render.md), que utiliza o
-Start Command com habilitação explícita por variáveis privadas. Não recrie o
-serviço existente e não altere seu plano. As instruções de criação abaixo são
-apenas referência para instalações novas.
+O professor usa o navegador e recebe acessos privadamente. Não precisa instalar
+Python ou conectar diretamente ao banco para testar online.
+Para executar localmente, siga o README: SQLite é usado por padrão, sem Docker.
 
-## Antes de começar
-
-- Código enviado ao [repositório do projeto](https://github.com/HelioGHB/ProjetoIntegradorUnisaProgWEB).
-- Acesso autenticado ao Render e escolha de um plano.
-- Um banco PostgreSQL **novo**, separado dos bancos anteriores.
-
-O `render.yaml` é uma configuração preparada, não um deploy já realizado.
-Auto-Deploy está Off para permitir testar e revisar cada fase antes de publicar.
-O arquivo não cria banco ou aplica mudanças no banco automaticamente.
-
-## 1. PostgreSQL e custo
-
-Crie um PostgreSQL no Render, preferencialmente versão principal 18, na mesma
-região do serviço (o arquivo sugere Virginia). Use usuário próprio da aplicação;
-o código recusa `postgres`. Guarde a URL em variáveis privadas.
-
-Referência consultada em 6/11/2026: o serviço web gratuito pausa após 15 minutos
-sem tráfego. O banco PostgreSQL gratuito expira em 30 dias, não possui backups
-e pode ser excluído pelo provedor depois do prazo de recuperação. Para avaliação
-por um período maior, considere banco pago. A referência inicial de computação
-paga é cerca de US$ 7/mês para web e US$ 6/mês para banco, além de armazenamento
-e eventuais adicionais. Confirme o preço final no painel antes de contratar.
-
-## 2. Inicializar o banco vazio
-
-Esta versão simples usa um comando explícito `init-db`, sem Alembic. Ele cria
-as três tabelas somente em banco vazio e recusa outra estrutura existente.
-Repeti-lo em uma estrutura reconhecida não modifica tabelas. Ele não atualiza
-um esquema antigo: futuras alterações de estrutura precisarão de uma migração
-planejada. Nenhum banco anterior foi apagado ou convertido durante o reinício.
-
-Para preparar o banco remoto no computador local, crie um arquivo privado
-`.env.hospedagem`, ignorado pelo Git, preenchido no editor com:
-
-```dotenv
-APP_ENV=production
-DATABASE_URL=URL_EXTERNA_PRIVADA_DO_POSTGRESQL
-SECRET_KEY=CHAVE_ALEATORIA_PRIVADA_COM_PELO_MENOS_32_CARACTERES
-TRUSTED_HOSTS=localhost
-DEMO_MODE=true
-```
-
-Os valores são marcadores, não credenciais utilizáveis. A produção adiciona
-`sslmode=require` à URL caso o parâmetro não esteja presente; não permite modo
-SSL inseguro. Se o provedor exigir verificação de certificado, configure a URL
-conforme suas instruções. No Render, restrinja o acesso externo ao seu IP antes
-de conectar do computador local.
-
-Após confirmar que a URL aponta para o banco **novo de demonstração**, execute:
-
-```bash
-flask --env-file .env.hospedagem --app app preparar-demo
-```
-
-O comando cria as tabelas e pede uma senha oculta para as três contas fictícias.
-Não existe senha padrão. Se já houver usuários, interrompe sem sobrescrever.
-Variáveis já exportadas no terminal têm prioridade sobre esse arquivo; confira
-que não há configurações de outro banco exportadas. Não use o banco antigo.
-Depois da preparação, restrinja novamente o acesso externo ao banco.
-
-No plano pago também é possível usar o Shell do Render, com as variáveis do
-serviço e `DEMO_MODE=true`, executando `flask --app app preparar-demo`.
-Desative DEMO_MODE depois. O plano gratuito não possui Shell remoto.
-
-## 3. Web Service
-
-No Render, crie **Web Service**, conecte o repositório e configure:
+## Configuração de referência
 
 | Campo | Valor |
 | --- | --- |
-| Runtime | Python 3 |
-| Região | Mesma do banco |
 | Build | `pip install -r requirements-render.txt` |
 | Start | `python -m flask --app app inicializar-deploy && gunicorn --config gunicorn.conf.py 'sigetec:create_app()'` |
-| Health Check | `/healthz` |
-| Auto-Deploy | Off |
+| Porta | Gunicorn usa `0.0.0.0:$PORT` |
+| Prontidão da aplicação | `/healthz` |
 
-Variáveis privadas/configuração no painel:
+O arquivo `render.yaml` é referência para provisionamento. Ele não substitui
+automaticamente configurações de um serviço criado manualmente. **Não importe
+um Blueprint para recriar este serviço só para atualizar documentação.**
 
-- `APP_ENV=production`
-- `PYTHON_VERSION=3.14.7` (versão usada nos testes locais)
-- `DATABASE_URL`: URL **interna** do PostgreSQL do Render na mesma região.
-- `SECRET_KEY`: chave privada aleatória com pelo menos 32 caracteres; o Blueprint
-  pode gerá-la. Não copie um valor público de exemplo.
-- `DEMO_MODE=false`, após criar a demonstração.
+Variáveis necessárias em produção:
 
-`RENDER_EXTERNAL_HOSTNAME` fornece o domínio padrão permitido. Para domínio
-próprio, informe `TRUSTED_HOSTS` com os hosts separados por vírgula, incluindo o
-domínio do Render e os domínios verificados usados pelos health checks.
+| Variável | Uso |
+| --- | --- |
+| APP_ENV | `production` |
+| DATABASE_URL | URL PostgreSQL privada, preferencialmente interna na mesma região |
+| SECRET_KEY | Chave privada estável com pelo menos 32 caracteres |
+| PYTHON_VERSION | `3.14.7`, versão usada na validação Linux |
+| TRUSTED_HOSTS | Opcional para o domínio padrão; obrigatório incluir domínios próprios quando usados |
 
-Em produção, cookies são seguros, a chave é obrigatória, debug é recusado e
-somente PostgreSQL com TLS é aceito. O proxy HTTPS frontal é reconhecido pelo
-protocolo encaminhado; não se confia em Host ou IP encaminhados pelo cliente.
-Esta configuração pressupõe hospedagem atrás de proxy confiável, como o Render.
+O Render fornece o hostname padrão. A aplicação exige TLS na conexão
+PostgreSQL, cookies seguros e debug desativado em produção. A configuração de
+proxy pressupõe um proxy frontal confiável, como o Render, e não confia em Host
+ou IP encaminhados pelo cliente. Nunca publique URLs de banco ou chaves.
 
-O health check só responde 200 após conexão e acesso à tabela de usuários.
-Prepare o banco pela conexão externa ou pela inicialização opcional antes do
-Gunicorn, descrita no guia. Sem tabelas, ele responderá 503.
-Criar o serviço/Blueprint já inicia a primeira implantação; não basta o código
-estar no GitHub. Depois, faça deploy manual para cada nova fase publicada.
+`/healthz` faz consultas somente de leitura para confirmar conexão e acesso à
+tabela de usuários. HTTP 200 não substitui a validação do login e das permissões.
+O serviço real deve usar essa rota como health check se a configuração no painel
+for atualizada; a consulta de inventário anterior mostrou o campo do painel
+vazio, embora a rota esteja funcionando. Não é necessário alterar o serviço
+para apresentar esta versão já validada.
 
-## 4. Professor
+## Depois da inicialização
 
-Após o deploy, abra a URL HTTPS fornecida pelo Render e execute o roteiro do
-README. Envie a URL e a senha escolhida ao professor por canal privado. Não
-publique credenciais administrativas no GitHub. Acesso online só pode ser
-confirmado depois de testar a implantação real. A execução local funciona
-independentemente dessa hospedagem.
+Mantenha:
 
-Fontes oficiais consultadas:
-[Flask no Render](https://render.com/docs/deploy-flask),
-[Python](https://render.com/docs/python-version),
-[PostgreSQL](https://render.com/docs/postgresql-creating-connecting),
-[limitações gratuitas](https://render.com/docs/free),
-[preços](https://render.com/pricing),
-[Blueprint](https://render.com/docs/blueprint-spec).
+```dotenv
+INIT_DB_ON_START=false
+CREATE_ADMIN_ON_START=false
+```
+
+Os três valores `BOOTSTRAP_ADMIN_*` devem ficar vazios ou removidos. A limpeza
+foi aplicada e seu redeploy confirmado nesta entrega, preservando `SECRET_KEY`,
+`DATABASE_URL` e demais variáveis. O Start Command pode permanecer: com as flags
+desativadas, não executa alterações no banco e inicia o Gunicorn.
+
+Use **Usuários → Cadastrar usuário** para novos técnicos/solicitantes. Não use
+`preparar-demo` no banco hospedado que já contém contas. A inicialização sem
+Shell está documentada em [inicializacao-render.md](inicializacao-render.md),
+apenas como referência para necessidade futura.
+
+## Publicar uma nova versão
+
+1. Teste localmente e confirme que não há credenciais entre os arquivos.
+2. Faça commit e push para `main`, preservando o histórico.
+3. Confira os eventos do serviço e o commit efetivamente implantado.
+4. Se a execução automática não iniciar, revise as credenciais Git no painel.
+   A fase 4 precisou de **Manual Deploy → Deploy latest commit**.
+5. Aguarde o deploy terminar como Live; valide `/healthz`, `/login` e o fluxo
+   alterado. Não dispare outro deploy se já houver um em andamento.
+
+O Blueprint usa Auto-Deploy Off para novos serviços. O serviço existente indicou
+automático por commit, mas isso não iniciou a fase 4; a causa não foi comprovada.
+A configuração visível não é evidência de que um deploy já começou.
+Commits somente de documentação podem usar `[skip render]` para evitar rebuild.
+
+## Persistência e limites
+
+Dados ficam no PostgreSQL e não no sistema de arquivos temporário do serviço.
+Nenhum plano foi alterado nesta entrega. Planos gratuitos têm limites e a
+validade do banco deve ser conferida no painel antes da avaliação. O inventário
+consultado em 7/11/2026 informa expiração do PostgreSQL gratuito em **6/12/2026**. A hospedagem
+pode demorar no primeiro acesso após inatividade. Consulte as condições atuais
+do provedor antes de depender de uma data de disponibilidade.
+
+O acesso externo ao banco permanece restrito. Não amplie a allowlist apenas
+para demonstrar a aplicação. Antes de alterações futuras de esquema, planeje
+migração e uma exportação privada quando aplicável. `init-db` não converte
+esquemas antigos e não deve ser usado para contornar uma incompatibilidade.
+
+## Referências oficiais
+
+- [Flask no Render](https://render.com/docs/deploy-flask)
+- [Variáveis e segredos](https://render.com/docs/configure-environment-variables)
+- [Deploys e eventos](https://render.com/docs/deploys)
+- [Health checks](https://render.com/docs/health-checks)
+- [PostgreSQL e conexões](https://render.com/docs/postgresql-creating-connecting)
+- [Limitações gratuitas](https://render.com/docs/free)

@@ -1,172 +1,192 @@
-# SIGETEC
+# SIGETEC — Sistema de Gerenciamento de Chamados Técnicos
 
-**Sistema de Gerenciamento de Chamados Técnicos** — Projeto Integrador do curso
-de Análise e Desenvolvimento de Sistemas da UNISA.
+Projeto Integrador do curso de **Análise e Desenvolvimento de Sistemas da UNISA**.
+Aplicação acadêmica para abrir, atribuir e acompanhar chamados de suporte,
+com acesso separado para administrador, técnico e solicitante.
 
-Versão acadêmica simples: login, três perfis e um fluxo básico de suporte.
-**Para executar localmente não precisa de PostgreSQL, Docker, Render ou arquivo
-`.env`.** O banco SQLite é preparado por um comando e fica na própria máquina.
-A interface usa HTML e CSS locais, sem depender de CDN.
+**Sistema online:** [sigetec-unisa.onrender.com](https://sigetec-unisa.onrender.com)
+· **[Entrar](https://sigetec-unisa.onrender.com/login)**
+· **[Roteiro de apresentação](docs/apresentacao.md)**
+· **[Relatório de entrega e validação](docs/entrega.md)**
 
-## Executar na máquina do professor
+O professor pode testar pelo navegador, sem instalar o projeto. Os acessos da
+instância online são compartilhados privadamente pelo responsável; não há
+senhas publicadas neste repositório.
 
-Requisito: **Python 3.11 ou superior**, com pip e venv. A instalação das
-bibliotecas precisa de internet; depois, a aplicação local funciona sem serviços
-externos. A validação foi feita em Linux com Python 3.14.7; não foi executada em
-Windows/macOS, mas os comandos de ativação correspondentes estão abaixo.
+## Funcionalidades entregues
 
-1. Baixe o código ou clone o repositório, entre na pasta e crie o ambiente:
-
-   ```bash
-   git clone https://github.com/HelioGHB/ProjetoIntegradorUnisaProgWEB.git
-   cd ProjetoIntegradorUnisaProgWEB
-   python -m venv .venv
-   ```
-
-   O código está publicado na branch `main`. Se recebeu o projeto em ZIP,
-   extraia-o e abra o terminal na pasta que contém `app.py`.
-   Se `python` não existir no Linux/macOS, use `python3` para criar o ambiente.
-   No Windows, também é possível usar `py -3 -m venv .venv`.
-
-2. Ative o ambiente:
-
-   | Sistema | Comando |
-   | --- | --- |
-   | Linux/macOS | `source .venv/bin/activate` |
-   | Windows PowerShell | `.venv\Scripts\Activate.ps1` |
-   | Windows Prompt de Comando | `.venv\Scripts\activate.bat` |
-
-   Se o PowerShell bloquear o script, use o Prompt de Comando ou execute
-   diretamente `.venv\Scripts\python.exe` nos comandos Python. Não é necessário
-   alterar políticas do sistema.
-
-3. Instale e prepare a demonstração:
-
-   ```bash
-   python -m pip install -r requirements.txt
-   python -m flask --app app preparar-demo
-   ```
-
-   Escolha e confirme uma senha de **12 a 128 caracteres** no terminal.
-   A digitação fica oculta. As três contas fictícias usarão essa senha escolhida,
-   apenas para facilitar a avaliação. **Não existe senha administrativa fixa no
-   código ou neste README.** O comando não altera contas se já houver usuários.
-
-4. Inicie:
-
-   ```bash
-   python app.py
-   ```
-
-   Abra **http://127.0.0.1:5000/**. Pare o servidor com `Ctrl+C`.
-   Nas próximas execuções basta ativar o ambiente e executar `python app.py`.
-
-O banco fica em `instance/sigetec.sqlite3` e não é enviado ao GitHub. Não apague
-esse arquivo se quiser manter os chamados. A preparação é explícita; iniciar o
-servidor não cria usuários ou recria tabelas.
-
-## Roteiro rápido de avaliação
-
-| Conta fictícia | Perfil |
+| Perfil | Acesso |
 | --- | --- |
-| solicitante@example.com | Solicitante |
-| admin@example.com | Administrador |
-| tecnico@example.com | Técnico |
+| Solicitante | Abre chamados, visualiza os próprios e registra comentários |
+| Técnico | Visualiza os chamados atribuídos a ele, registra solução/comentários e atualiza a situação |
+| Administrador | Visualiza todos, atribui técnicos, atualiza a situação, fecha/reabre chamados e cadastra técnicos e solicitantes |
 
-Use a senha escolhida durante `preparar-demo`:
+O administrador também ativa/desativa contas sem excluir seus chamados ou
+comentários. Contas administrativas são protegidas contra desativação pela tela.
+O cadastro público e a criação de administradores pelo formulário não existem.
+Somente o administrador pode reabrir um chamado fechado.
 
-1. Entre como **solicitante**, clique em **Abrir chamado** e preencha título,
-   descrição e prioridade.
-2. Saia e entre como **administrador**. Abra o chamado e atribua **Técnico Demo**.
-3. Entre como **técnico**. Atualize a situação para **em andamento**, registre a
-   solução nos comentários e marque **resolvido**.
-4. Entre novamente como **solicitante** para conferir a solução e comentar.
-5. O administrador pode fechar e reabrir o chamado. Um técnico não pode reabrir
-   um chamado fechado.
+Prioridades: `baixa`, `media`, `alta`, `critica`.
+Situações: `aberto`, `em_andamento`, `resolvido`, `fechado`.
+As permissões são verificadas no servidor, inclusive em acessos diretos por URL.
 
-O solicitante visualiza somente os próprios chamados; o técnico visualiza
-somente os atribuídos a ele; o administrador visualiza todos. Essas regras
-são verificadas no servidor, inclusive ao acessar IDs diretamente pela URL.
-O botão **Sair** encerra a sessão.
+O escopo permanece simples: não há anexos, notificações por e-mail, relatórios,
+categorias, auditoria separada, edição de perfil ou troca de senha pela interface.
+Comentários permitem registrar o atendimento e a solução.
 
-Não há cadastro público, exclusão de registros, anexos, relatórios ou envio de
-e-mail. Para manter o projeto pequeno, categorias e histórico separado ficaram
-fora desta versão. Os comentários permitem registrar a conversa e a solução.
+## Três capturas do sistema funcionando
 
-## Administrar usuários pelo navegador
+Capturas reais em Chromium, feitas em **7/11/2026** com o código da aplicação,
+SQLite temporário e dados totalmente fictícios. Não foram usadas contas do PostgreSQL hospedado. A interface é a mesma da
+versão publicada.
+Nenhuma senha foi incluída nas imagens.
 
-Após entrar como administrador, use **Usuários → Cadastrar usuário** para
-criar contas de técnico ou solicitante. Informe nome, e-mail, perfil, senha
-inicial (12 a 128 caracteres) e confirmação. Compartilhe a senha privadamente.
-Não é preciso executar `preparar-demo` no banco hospedado para adicionar essas
-contas; esse comando continua reservado à demonstração local inicial.
+**1. Autenticação**
 
-A listagem permite **ativar ou desativar** essas contas. Uma desativação impede
-o próximo acesso, inclusive de uma sessão aberta, e preserva chamados e
-comentários. Repetir a mesma ação não inverte o estado. Contas administrativas
-ficam protegidas contra desativação e não podem ser criadas por esse formulário.
-E-mails duplicados são recusados sem alterar a conta anterior.
-As permissões e o CSRF são verificados no backend.
+![Tela de login do SIGETEC com campos de e-mail e senha](docs/images/01-login.png)
 
-Não há edição de perfil, troca de senha ou exclusão de usuários nesta fase.
-Validação em 7/11/2026: **69 testes aprovados**, incluindo cadastro com hash,
-e-mail duplicado, tentativa de criar administrador, CSRF, permissões e
-revogação de sessão após desativação. Os testes não alteram o banco hospedado.
+**2. Chamados na visão do administrador**
 
-## Estrutura e conceitos
+![Lista de três chamados fictícios com prioridade, situação e técnico responsável](docs/images/02-chamados.png)
 
-```text
-app.py                    Inicia o servidor local
-config.py                 SQLite local e variáveis da hospedagem
-sigetec/
-    __init__.py           Fábrica Flask, extensões e tratamento de erros
-    models.py             Usuario, Chamado e Comentario
-    forms.py              Validação e proteção CSRF dos formulários
-    routes.py             Login, chamados e permissões
-    cli.py                Inicialização explícita e preparação da demonstração
-templates/                HTML e estilo local compartilhado
-tests/                    Testes com banco em memória
-docs/
-    fases.md              Fases, commits e situação da publicação
-    modelagem.md          Tabelas e regras de acesso
-    implantacao.md        Publicação opcional no Render
-gunicorn.conf.py          Servidor para hospedagem
-render.yaml               Configuração do serviço Render
-requirements.txt          Bibliotecas para execução local
-requirements-render.txt   Bibliotecas adicionais para hospedagem
-requirements-dev.txt      Bibliotecas adicionais para testes
+**3. Atendimento e solução na visão do solicitante**
+
+![Detalhe de chamado resolvido com solução do técnico e resposta da solicitante](docs/images/03-atendimento.png)
+
+O script opcional de reprodução é `scripts/capturar_telas.py`; instruções no
+[roteiro de apresentação](docs/apresentacao.md#reproduzir-as-capturas-opcional).
+Playwright não é uma dependência necessária para executar o SIGETEC.
+
+## Executar localmente, sem Docker ou PostgreSQL
+
+Requisito: **Python 3.11 ou superior**, pip e venv. A instalação das bibliotecas
+precisa de internet. Depois, a execução local não depende de serviços externos.
+O ambiente validado foi Linux com Python 3.14.7; Windows/macOS não foram testados.
+
+```bash
+git clone https://github.com/HelioGHB/ProjetoIntegradorUnisaProgWEB.git
+cd ProjetoIntegradorUnisaProgWEB
+python -m venv .venv
 ```
 
-- **Fábrica:** `create_app()` configura a aplicação; nos testes recebe um banco
-  diferente, sem acessar dados reais.
-- **ORM:** os modelos Python representam tabelas. SQLAlchemy faz consultas e
-  controla transações com `commit()` e `rollback()`.
-- **Autenticação:** Flask-Login mantém a identidade na sessão. Werkzeug salva
-  hash de senha; Flask-WTF protege os formulários com CSRF.
-- **Autorização:** as rotas conferem o perfil e a relação do usuário com o chamado.
+Ative o ambiente:
 
-As restrições do banco e o modelo estão em [docs/modelagem.md](docs/modelagem.md).
+| Sistema | Comando |
+| --- | --- |
+| Linux/macOS | `source .venv/bin/activate` |
+| Windows PowerShell | `.venv\Scripts\Activate.ps1` |
+| Windows Prompt de Comando | `.venv\Scripts\activate.bat` |
 
-## Configuração opcional e dados anteriores
+Se necessário, use `python3` no Linux/macOS ou `py -3` no Windows para criar o
+ambiente. Se o PowerShell bloquear a ativação, use o Prompt de Comando ou
+`.venv\Scripts\python.exe` diretamente; não é preciso alterar políticas globais.
 
-Localmente, uma chave de sessão aleatória é gerada a cada inicialização se
-SECRET_KEY não estiver configurada; reiniciar encerra as sessões antigas, mas
-preserva usuários e chamados. Para manter a chave entre reinícios, copie
-`.env.example` para **`.env.local`** e configure SECRET_KEY privadamente.
-Nunca publique esses arquivos. Não é necessário fazer isso para a avaliação local.
+```bash
+python -m pip install -r requirements.txt
+python -m flask --app app preparar-demo
+python app.py
+```
 
-Os arquivos `.env` e bancos do projeto anterior foram preservados. A fábrica
-local lê apenas `.env.local`; a CLI do Flask também pode carregar `.env`, mas,
-em `APP_ENV=development`, DATABASE_URL é ignorada e o banco é sempre SQLite.
-Não defina APP_ENV=production para o teste local do professor.
+O comando `preparar-demo` cria as tabelas do SQLite local e solicita uma senha
+oculta de **12 a 128 caracteres**, com confirmação. Para facilitar a avaliação
+local, as três contas fictícias usam essa senha escolhida:
 
-`python -m flask --app app init-db` cria somente as tabelas de um banco vazio.
-Não apaga tabelas ou dados. Se encontrar estrutura incompatível, recusa o banco.
-Não é uma migração automática: alterações futuras precisam de atualização de
-esquema planejada. Não aponte esta versão para bancos antigos para tentar
-convertê-los. O reinício não executou comandos nos bancos PostgreSQL anteriores.
+| E-mail local | Perfil |
+| --- | --- |
+| admin@example.com | Administrador |
+| tecnico@example.com | Técnico |
+| solicitante@example.com | Solicitante |
 
-## Testes
+**Não há senha padrão no código.** Esse quadro se refere à demonstração local,
+não aos acessos da hospedagem. O comando recusa modificar contas se já houver
+usuários. Não o execute no banco online já preparado para criar novas contas:
+use **Usuários → Cadastrar usuário**, autenticado como administrador.
+
+Abra **http://127.0.0.1:5000/**. Pare com `Ctrl+C`. Nas próximas execuções,
+basta ativar o ambiente e executar `python app.py`.
+O banco local fica em `instance/sigetec.sqlite3`; não apague esse arquivo se
+quiser preservar os dados. Recebeu um ZIP? Extraia e abra o terminal na pasta
+que contém `app.py`, seguindo os mesmos passos sem o clone.
+
+## Roteiro rápido de teste
+
+1. Entre como solicitante e abra um chamado com título, descrição e prioridade.
+2. Saia e entre como administrador para atribuir um técnico.
+3. Entre como esse técnico, atualize para **em andamento**, comente a solução e
+   marque como **resolvido**.
+4. Volte ao solicitante para consultar e responder ao atendimento.
+5. Confira que solicitante/técnico não acessam `/usuarios`; o administrador
+   pode cadastrar novos usuários, fechar o chamado e reabri-lo.
+
+Use **Sair** entre os perfis, ou perfis de navegador separados. Janelas anônimas
+do mesmo navegador podem compartilhar a mesma sessão.
+O [roteiro completo](docs/apresentacao.md) inclui falas sugeridas e perguntas
+para a apresentação acadêmica.
+
+## Tecnologias e estrutura
+
+Python, Flask, Flask-SQLAlchemy, Flask-Login, Flask-WTF/WTForms, Werkzeug,
+HTML/CSS, pytest, SQLite local e PostgreSQL com Psycopg 3 na hospedagem.
+O Render executa o Flask com Gunicorn. Docker não é necessário.
+
+```text
+app.py                       Entrada do servidor local
+config.py                    SQLite local e variáveis de produção
+sigetec/
+    __init__.py              Fábrica create_app, extensões e erros
+    models.py                Usuario, Chamado e Comentario
+    forms.py                 Formulários e validação
+    routes.py                Autenticação, usuários, chamados e permissões
+    cli.py                   Comandos de preparação
+    bootstrap.py             Inicialização opcional, transacional e repetível
+templates/                   Interface HTML e CSS local
+scripts/capturar_telas.py     Capturas opcionais em banco temporário
+tests/                       Testes isolados
+docs/
+    apresentacao.md          Roteiro de 8–10 minutos
+    entrega.md               Estado entregue, evidências e limites
+    fases.md                 Histórico das entregas e commits
+    modelagem.md             Tabelas e integridade
+    implantacao.md           Operação e hospedagem
+    inicializacao-render.md  Referência para inicialização sem Shell
+    images/                  Três screenshots usados neste README
+requirements.txt             Execução local
+requirements-render.txt      PostgreSQL e Gunicorn
+requirements-dev.txt         Dependências dos testes
+render.yaml                  Referência de configuração do Render
+```
+
+`create_app()` monta a aplicação e permite configurar um banco diferente nos
+testes. Os modelos representam tabelas; `commit()` confirma uma transação e
+`rollback()` desfaz uma transação que falhou. A senha é armazenada como hash com
+salt, e as sessões e formulários usam assinatura/CSRF. Detalhes em
+[modelagem do banco](docs/modelagem.md).
+
+## Configuração e inicialização
+
+- **Local:** SQLite por padrão, sem `.env` obrigatório. A fábrica lê opcionalmente
+  `.env.local`. Sem `SECRET_KEY`, gera uma chave aleatória por inicialização;
+  reiniciar encerra sessões antigas, mas não apaga usuários ou chamados.
+- **Produção:** exige `APP_ENV=production`, `DATABASE_URL` PostgreSQL com TLS,
+  `SECRET_KEY` privada e domínio permitido. O domínio padrão é detectado no
+  Render; domínios próprios usam `TRUSTED_HOSTS`.
+- O `.env` legado foi preservado. Mesmo se a CLI do Flask o carregar, no modo
+  local `DATABASE_URL` é ignorada. Não use `APP_ENV=production` para o teste
+  local do professor.
+- `init-db` cria tabelas apenas num banco vazio; recusa nomes de tabelas/colunas
+  incompatíveis. Não é uma ferramenta de migração e não atualiza esquemas antigos.
+- `criar-admin` cadastra o primeiro administrador com senha oculta, sem alterar
+  um administrador existente. `preparar-demo` é a alternativa de demonstração.
+- O Start Command do Render inclui `inicializar-deploy`, controlado por
+  `INIT_DB_ON_START` e `CREATE_ADMIN_ON_START`. Depois do primeiro sucesso,
+  mantenha as duas flags em `false` e os valores `BOOTSTRAP_ADMIN_*` vazios ou
+  removidos. Não repita a preparação no banco já validado.
+
+A instância online já foi inicializada. O [guia sem Shell](docs/inicializacao-render.md)
+é uma referência para instalação nova ou recuperação planejada, não uma
+pendência para o professor. Nunca publique credenciais, banco, `.env` ou `.venv`.
+
+## Validação atual
 
 ```bash
 python -m pip install -r requirements-dev.txt
@@ -174,67 +194,31 @@ python -m pytest -q
 python -m pip check
 ```
 
-Os testes usam exclusivamente **SQLite em memória**, com CSRF e chaves
-estrangeiras habilitados. Cobrem login, logout, inativos, perfis, privacidade,
-abertura, atribuição, comentários, status, reabertura, validação, integridade,
-preparação da demonstração e preservação de estrutura incompatível.
-A configuração PostgreSQL é montada sem conectar a servidor real.
+Em **7/11/2026**, os **69 testes passaram** em SQLite em memória, com CSRF e
+chaves estrangeiras habilitados. Cobrem autenticação, integridade, bootstrap,
+perfis, usuários, privacidade e o ciclo de atendimento.
+Também houve verificação anterior de transações, rollback e concorrência em
+PostgreSQL temporário isolado. A captura em navegador percorreu login e páginas
+autenticadas numa instância temporária com dados fictícios.
 
-Verificação realizada em 6/11/2026:
+No Render, a fase funcional `bbb5549` foi confirmada **Live**, e `/healthz` e
+`/login` responderam HTTP 200. O responsável relatou sucesso no teste completo
+online com as contas cadastradas; essa validação manual está distinguida dos
+testes automatizados. As capturas não modificam o PostgreSQL hospedado.
 
-- **36 testes aprovados** em uma cópia do código com ambiente virtual novo.
-- Dependências instaladas a partir dos requirements, sem incompatibilidades.
-- Preparação de três contas com senha oculta em SQLite temporário.
-- Servidor Gunicorn real: início, health check, login com CSRF e abertura de
-  chamado aprovados por HTTP na cópia isolada.
-- Configuração Gunicorn e compilação dos módulos verificadas sem erro.
+## Entrega, GitHub e hospedagem
 
-Esses testes não acessaram bancos anteriores nem PostgreSQL hospedado.
-Windows/macOS e deploy no Render ainda não foram executados.
+O código e o histórico estão na branch `main`. Cada fase foi registrada com
+mudança e validação em [docs/fases.md](docs/fases.md).
+A fonte de verdade do comportamento entregue é o código desta branch.
 
-## PostgreSQL do Render: inicialização sem Shell
+O Blueprint usa Auto-Deploy Off como referência para novos serviços. No serviço
+existente, o Render indicou automático por commit, mas a fase 4 precisou de
+deploy manual; confirme os eventos, não apenas o campo de configuração.
+Não crie outro serviço ou banco para reproduzir a demonstração já publicada.
 
-O serviço **sigetec-unisa** já está Live, conforme informado pelo responsável:
-https://sigetec-unisa.onrender.com
-
-A inicialização de tabelas é uma etapa separada do deploy. Para o plano gratuito,
-o comando opcional `inicializar-deploy` executa antes do Gunicorn, com flags
-privadas desativadas por padrão. Pode criar as três tabelas e somente o primeiro
-administrador, sem apagar dados ou redefinir senhas. Não existe rota pública
-de inicialização.
-
-Siga o [passo a passo de inicialização no Render](docs/inicializacao-render.md).
-O guia mostra as variáveis temporárias, o novo Start Command, como conferir
-`/healthz` e o login, e como desativar a inicialização após o primeiro sucesso.
-Não é preciso mudar o plano ou usar um Shell pago. O comando interativo
-`criar-admin` também foi adicionado para a alternativa de conexão local segura.
-Nesta atualização, **51 testes passaram**, e uma validação adicional num
-PostgreSQL temporário confirmou transação, rollback e concorrência. Não houve
-inicialização no PostgreSQL hospedado durante a preparação.
-As contas locais de demonstração e seu procedimento continuam disponíveis.
-
-## GitHub, fases e hospedagem
-
-As entregas são separadas por commits com descrição da fase e da validação.
-Veja [docs/fases.md](docs/fases.md) para o histórico e eventuais impedimentos
-reais de publicação. Depois de autenticar o Git, o envio normal é:
-
-```bash
-git push -u origin main
-```
-
-Não use force push. Publicar código no GitHub não cria um endereço web executável.
-A execução online precisa de Render e PostgreSQL hospedado, descritos em
-[docs/implantacao.md](docs/implantacao.md). O arquivo Render usa Gunicorn e
-mantém deploy automático desativado, para publicar cada fase após sua verificação.
-Nada depende de GitHub Pages. A execução local funciona sem hospedagem.
-
-
-## Entrega por ZIP
-
-Quando a publicação no GitHub ainda não estiver disponível, use
-`entrega/SIGETEC.zip`, gerado a partir do commit final. O ZIP contém código,
-templates, testes e instruções, sem `.env`, `.venv`, histórico Git ou banco.
-Extraia e siga a seção **Executar na máquina do professor**. A instalação das
-bibliotecas ainda precisa de internet. O ZIP é um artefato local e não faz
-parte dos arquivos versionados.
+Veja [operação no Render](docs/implantacao.md) e o
+[relatório de entrega](docs/entrega.md). Planos pagos, operações destrutivas e
+novas funcionalidades exigem decisão explícita. Nada depende de GitHub Pages.
+O ZIP local em `entrega/SIGETEC.zip` é gerado do commit final e contém código e
+documentação, sem banco, credenciais, ambiente virtual ou histórico Git.
