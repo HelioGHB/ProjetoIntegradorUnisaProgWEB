@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% from 'campos.html' import campo %}
+{% block title %}Cadastrar usuário · SIGETEC{% endblock %}
+{% block content %}
+<section class="card">
+    <a href="{{ url_for('usuarios') }}">Voltar aos usuários</a>
+    <h1>Cadastrar usuário</h1>
+    <p class="muted">O cadastro é restrito ao administrador. Compartilhe a senha inicial com o usuário por um canal privado.</p>
+    <form method="post">
+        {{ form.hidden_tag() }}
+        {{ campo(form.nome) }}{{ campo(form.email) }}{{ campo(form.perfil) }}
+        {{ campo(form.senha) }}{{ campo(form.confirmar_senha) }}
+        <button type="submit">Cadastrar usuário</button>
+    </form>
+</section>
+{% endblock %}

@@ -2,10 +2,10 @@ from flask import abort, flash, redirect, render_template, url_for
 from flask_login import current_user, login_required, login_user, logout_user
 from wtforms import SelectChoice
 from sqlalchemy import text
-from sqlalchemy.exc import SQLAlchemyError
+from sqlalchemy.exc import IntegrityError, SQLAlchemyError
 from werkzeug.security import check_password_hash, generate_password_hash
 
-from sigetec.forms import AtribuirForm, AtualizarForm, ChamadoForm, ComentarioForm, LoginForm
+from sigetec.forms import AtribuirForm, AtualizarForm, ChamadoForm, ComentarioForm, LoginForm, UsuarioForm
 from sigetec.models import Chamado, Comentario, Usuario, db
 
 _DUMMY_HASH = generate_password_hash('nenhuma-conta-associada-a-este-valor')
@@ -147,6 +147,54 @@ def register_routes(app):
         else:
             mostrar_erros(form)
         return redirect(url_for('detalhe_chamado', chamado_id=chamado.id))
+
+    @app.get('/usuarios')
+    @login_required
+    def usuarios():
+        if current_user.perfil != 'administrador':
+            abort(403)
+        registros = db.session.scalars(db.select(Usuario).order_by(Usuario.nome, Usuario.id)).all()
+        return render_template('usuarios.html', usuarios=registros)
+
+    @app.route('/usuarios/novo', methods=['GET', 'POST'])
+    @login_required
+    def novo_usuario():
+        if current_user.perfil != 'administrador':
+            abort(403)
+        form = UsuarioForm()
+        if form.validate_on_submit():
+            email = form.email.data.lower()
+            if db.session.scalar(db.select(Usuario.id).where(Usuario.email == email)):
+                flash('Já existe um usuário com esse e-mail.', 'danger')
+            else:
+                usuario = Usuario(nome=form.nome.data, email=email, perfil=form.perfil.data, ativo=True)
+                usuario.definir_senha(form.senha.data)
+                db.session.add(usuario)
+                try:
+                    db.session.commit()
+                except IntegrityError:
+                    db.session.rollback()
+                    flash('Não foi possível cadastrar. Verifique se o e-mail já está em uso.', 'danger')
+                else:
+                    flash('Usuário cadastrado com sucesso.', 'success')
+                    return redirect(url_for('usuarios'))
+        return render_template('novo_usuario.html', form=form)
+
+    @app.post('/usuarios/<int:usuario_id>/<acao>')
+    @login_required
+    def alterar_acesso_usuario(usuario_id, acao):
+        if current_user.perfil != 'administrador':
+            abort(403)
+        if acao not in ('ativar', 'desativar'):
+            abort(404)
+        usuario = db.get_or_404(Usuario, usuario_id)
+        # Preserva o acesso administrativo e impede bloqueio da própria conta.
+        if usuario.perfil == 'administrador':
+            abort(403)
+        usuario.ativo = acao == 'ativar'
+        db.session.commit()
+        flash('Acesso do usuário atualizado.', 'success')
+        return redirect(url_for('usuarios'))
 
     @app.get('/healthz')
     def healthz():

@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% block title %}Usuários · SIGETEC{% endblock %}
+{% block content %}
+<section class="card">
+    <div class="actions">
+        <h1>Usuários</h1>
+        <a class="button" href="{{ url_for('novo_usuario') }}">Cadastrar usuário</a>
+    </div>
+    <p class="muted">Gerencie os acessos de técnicos e solicitantes. Desativar uma conta preserva seus chamados e comentários.</p>
+    <div class="table-wrap"><table>
+        <thead><tr><th>Nome</th><th>E-mail</th><th>Perfil</th><th>Acesso</th><th>Ação</th></tr></thead>
+        <tbody>{% for usuario in usuarios %}<tr>
+            <td>{{ usuario.nome }}</td><td>{{ usuario.email }}</td>
+            <td>{{ {'administrador': 'Administrador', 'tecnico': 'Técnico', 'solicitante': 'Solicitante'}[usuario.perfil] }}</td>
+            <td>{{ 'Ativo' if usuario.ativo else 'Inativo' }}</td>
+            <td>{% if usuario.perfil != 'administrador' %}
+                <form method="post" action="{{ url_for('alterar_acesso_usuario', usuario_id=usuario.id, acao='desativar' if usuario.ativo else 'ativar') }}">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                    <button type="submit">{{ 'Desativar' if usuario.ativo else 'Ativar' }}</button>
+                </form>
+                {% else %}<span class="muted">Conta administrativa protegida</span>{% endif %}
+            </td>
+        </tr>{% endfor %}</tbody>
+    </table></div>
+</section>
+{% endblock %}

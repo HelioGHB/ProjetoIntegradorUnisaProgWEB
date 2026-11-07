@@ -93,6 +93,26 @@ Não há cadastro público, exclusão de registros, anexos, relatórios ou envio
 e-mail. Para manter o projeto pequeno, categorias e histórico separado ficaram
 fora desta versão. Os comentários permitem registrar a conversa e a solução.
 
+## Administrar usuários pelo navegador
+
+Após entrar como administrador, use **Usuários → Cadastrar usuário** para
+criar contas de técnico ou solicitante. Informe nome, e-mail, perfil, senha
+inicial (12 a 128 caracteres) e confirmação. Compartilhe a senha privadamente.
+Não é preciso executar `preparar-demo` no banco hospedado para adicionar essas
+contas; esse comando continua reservado à demonstração local inicial.
+
+A listagem permite **ativar ou desativar** essas contas. Uma desativação impede
+o próximo acesso, inclusive de uma sessão aberta, e preserva chamados e
+comentários. Repetir a mesma ação não inverte o estado. Contas administrativas
+ficam protegidas contra desativação e não podem ser criadas por esse formulário.
+E-mails duplicados são recusados sem alterar a conta anterior.
+As permissões e o CSRF são verificados no backend.
+
+Não há edição de perfil, troca de senha ou exclusão de usuários nesta fase.
+Validação em 7/11/2026: **69 testes aprovados**, incluindo cadastro com hash,
+e-mail duplicado, tentativa de criar administrador, CSRF, permissões e
+revogação de sessão após desativação. Os testes não alteram o banco hospedado.
+
 ## Estrutura e conceitos
 
 ```text

@@ -63,3 +63,24 @@ Validação desta atualização: 51 testes pytest aprovados e verificação adic
 em PostgreSQL temporário, incluindo preservação de senha, rollback de DDL e
 duas inicializações simultâneas sem duplicar o administrador. Nenhum banco
 hospedado foi acessado e nenhum plano foi alterado.
+
+
+## Fase 4 — Administração de usuários
+
+Cadastro de técnicos e solicitantes pelo administrador em `/usuarios`, com
+confirmação de senha e recusa de e-mail duplicado. A listagem permite ativar e
+desativar contas sem excluir chamados ou comentários. Contas administrativas
+não podem ser bloqueadas nem criadas por esse formulário. As regras são
+verificadas no servidor e os formulários mantêm proteção CSRF.
+
+Não houve alteração de tabelas ou necessidade de migração nesta fase.
+Na retomada de 7/11/2026, o Render confirmou deploy Live do commit `bfeb1c6`.
+Os logs registraram tabelas e administrador criados em 6/11, com uma execução
+posterior preservando a senha. A consulta SQL direta pelo MCP foi bloqueada
+pela política de acesso externo do banco; essa política não foi modificada.
+O serviço real tem deploy automático por commit habilitado, diferentemente
+do padrão Off descrito no Blueprint para novas instalações.
+
+Validação da fase 4 em 7/11/2026: 69 testes pytest aprovados. Não houve acesso
+a credenciais, alteração de plano, ampliação da allowlist ou mudança de esquema.
+A verificação do deploy é registrada após a publicação, separadamente dos testes.
