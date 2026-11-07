@@ -222,3 +222,9 @@ Veja [operação no Render](docs/implantacao.md) e o
 novas funcionalidades exigem decisão explícita. Nada depende de GitHub Pages.
 O ZIP local em `entrega/SIGETEC.zip` é gerado do commit final e contém código e
 documentação, sem banco, credenciais, ambiente virtual ou histórico Git.
+
+---
+
+**O Autor:** Desenvolvido por Greyke Helio - Sinta-se à vontade para se conectar ou dar uma olhada nos meus outros projetos de programação!
+
+Linkedin: [www.linkedin.com/in/helio-ghb](http://www.linkedin.com/in/helio-ghb)
