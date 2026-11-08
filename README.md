@@ -9,9 +9,51 @@ com acesso separado para administrador, técnico e solicitante.
 · **[Roteiro de apresentação](docs/apresentacao.md)**
 · **[Relatório de entrega e validação](docs/entrega.md)**
 
-O professor pode testar pelo navegador, sem instalar o projeto. Os acessos da
-instância online são compartilhados privadamente pelo responsável; não há
-senhas publicadas neste repositório.
+## Acessar e fazer login online
+
+1. Abra **[sigetec-chamados.onrender.com](https://sigetec-chamados.onrender.com)** no navegador, sem instalar o projeto.
+2. Clique em **Entrar**, ou acesse diretamente a [tela de login](https://sigetec-chamados.onrender.com/login).
+3. Informe o **e-mail e a senha fornecidos pelo responsável pelo projeto** e clique em **Entrar**. Após autenticar, será exibida a lista de chamados disponível para seu perfil.
+4. Para trocar de conta ou encerrar a sessão, clique em **Sair**.
+
+**Não possui acesso?** Solicite ao responsável uma conta de teste e informe qual
+perfil deseja avaliar: solicitante, técnico ou administrador. Não existe cadastro
+público nem senha padrão. As credenciais online são compartilhadas em canal
+privado; as contas `@example.com` descritas adiante funcionam somente na
+[demonstração local](#executar-localmente-sem-docker-ou-postgresql), após sua preparação.
+
+A hospedagem gratuita pode levar cerca de um minuto para responder no primeiro
+acesso após um período sem uso. Aguarde o carregamento. Se o login for recusado,
+confira o e-mail e a senha e consulte o responsável sobre a ativação da conta;
+não há recuperação de senha pela interface.
+
+## Como usar e testar o SIGETEC
+
+Use dados fictícios nos testes. Para percorrer todo o atendimento, tenha acesso
+aos três perfis. Clique em **Sair** antes de entrar com outra conta; janelas
+anônimas do mesmo navegador podem compartilhar a sessão.
+
+| Etapa | Perfil | Ação na interface | Resultado esperado |
+| --- | --- | --- | --- |
+| 1. Abrir solicitação | Solicitante | Em **Chamados**, clique em **Abrir chamado**, preencha título, descrição e prioridade e clique em **Registrar chamado**. Exemplo: “Teste — computador sem acesso à rede”. | Chamado criado como **aberto**, inicialmente sem técnico. Anote seu número. |
+| 2. Definir responsável | Administrador | Abra o chamado pelo título. Em **Atribuir técnico**, selecione o técnico de teste e clique em **Salvar responsável**. | O chamado passa a aparecer na lista desse técnico. |
+| 3. Atender | Técnico atribuído | Abra o chamado, selecione **em andamento** em **Atualizar atendimento** e clique em **Salvar situação**. | O solicitante pode acompanhar a nova situação. |
+| 4. Registrar solução | Técnico atribuído | Em **Comentários e solução**, escreva a solução fictícia e clique em **Enviar comentário**. Depois selecione **resolvido** e clique em **Salvar situação**. | Solução registrada e chamado resolvido. |
+| 5. Conferir atendimento | Solicitante | Abra o mesmo chamado, leia a solução e envie um comentário confirmando o teste. | Histórico visível ao solicitante e à equipe responsável. |
+| 6. Encerrar | Administrador | Abra o chamado e altere a situação para **fechado**, usando **Salvar situação**. | Atendimento encerrado; somente o administrador pode reabri-lo. |
+
+Para testar o cadastro, entre como administrador e abra **Usuários → Cadastrar
+usuário**. Preencha nome, e-mail, perfil (técnico ou solicitante) e senha conforme
+as validações do formulário. Em **Usuários**, os botões **Ativar/Desativar**
+controlam o acesso sem excluir os registros. Use contas fictícias de teste.
+
+**O que cada pessoa verá:** o solicitante acompanha somente seus próprios
+chamados; o técnico acompanha somente os atribuídos a ele; o administrador
+acompanha todos. Uma lista vazia pode indicar que ainda não existem chamados
+para aquela conta. A gestão de usuários é exclusiva do administrador.
+
+Para avaliar sem solicitar credenciais online, siga a instalação local abaixo:
+ela prepara três contas de demonstração com uma senha escolhida por você.
 
 ## Funcionalidades entregues
 
@@ -37,8 +79,8 @@ Comentários permitem registrar o atendimento e a solução.
 ## Três capturas do sistema funcionando
 
 Capturas reais em Chromium, feitas em **7/11/2026** com o código da aplicação,
-SQLite temporário e dados totalmente fictícios. Não foram usadas contas do PostgreSQL hospedado. A interface é a mesma da
-versão publicada.
+SQLite temporário e dados totalmente fictícios. Não foram usadas contas do PostgreSQL hospedado. As capturas são anteriores à atualização do rodapé para a identificação
+independente do SIGETEC; o fluxo demonstrado permanece o mesmo.
 Nenhuma senha foi incluída nas imagens.
 
 **1. Autenticação**
@@ -177,10 +219,11 @@ salt, e as sessões e formulários usam assinatura/CSRF. Detalhes em
   incompatíveis. Não é uma ferramenta de migração e não atualiza esquemas antigos.
 - `criar-admin` cadastra o primeiro administrador com senha oculta, sem alterar
   um administrador existente. `preparar-demo` é a alternativa de demonstração.
-- O Start Command do Render inclui `inicializar-deploy`, controlado por
-  `INIT_DB_ON_START` e `CREATE_ADMIN_ON_START`. Depois do primeiro sucesso,
-  mantenha as duas flags em `false` e os valores `BOOTSTRAP_ADMIN_*` vazios ou
-  removidos. Não repita a preparação no banco já validado.
+- O serviço atual `sigetec-chamados` inicia diretamente com Gunicorn e reutiliza
+  o PostgreSQL existente. A referência `render.yaml` também oferece
+  `inicializar-deploy`, controlado por `INIT_DB_ON_START` e
+  `CREATE_ADMIN_ON_START`. Mantenha as duas flags em `false` e os valores
+  `BOOTSTRAP_ADMIN_*` vazios ou removidos no ambiente já preparado.
 
 A instância online já foi inicializada. O [guia sem Shell](docs/inicializacao-render.md)
 é uma referência para instalação nova ou recuperação planejada, não uma
@@ -201,10 +244,13 @@ Também houve verificação anterior de transações, rollback e concorrência e
 PostgreSQL temporário isolado. A captura em navegador percorreu login e páginas
 autenticadas numa instância temporária com dados fictícios.
 
-No Render, a fase funcional `bbb5549` foi confirmada **Live**, e `/healthz` e
-`/login` responderam HTTP 200. O responsável relatou sucesso no teste completo
-online com as contas cadastradas; essa validação manual está distinguida dos
-testes automatizados. As capturas não modificam o PostgreSQL hospedado.
+Em **8/11/2026**, o novo serviço `sigetec-chamados` foi confirmado **Live**.
+`/healthz` respondeu HTTP 200 com consulta ao banco e à tabela de usuários;
+`/login` respondeu HTTP 200 com rodapé sem identificação institucional, e
+`/usuarios` sem sessão encaminhou ao login. O login autenticado no novo endereço
+ainda precisa de conferência pelo responsável. Na instância anterior, o
+responsável relatou sucesso no fluxo completo com as contas cadastradas.
+As capturas e os testes automatizados não modificam o PostgreSQL hospedado.
 
 ## Entrega, GitHub e hospedagem
 
@@ -212,9 +258,9 @@ O código e o histórico estão na branch `main`. Cada fase foi registrada com
 mudança e validação em [docs/fases.md](docs/fases.md).
 A fonte de verdade do comportamento entregue é o código desta branch.
 
-O Blueprint usa Auto-Deploy Off como referência para novos serviços. No serviço
-existente, o Render indicou automático por commit, mas a fase 4 precisou de
-deploy manual; confirme os eventos, não apenas o campo de configuração.
+O serviço atual `sigetec-chamados` e a referência Blueprint usam Auto-Deploy
+Off. Novas versões exigem deploy manual; confirme o estado Live nos eventos.
+A migração está registrada em [docs/migracao-endereco.md](docs/migracao-endereco.md).
 Não crie outro serviço ou banco para reproduzir a demonstração já publicada.
 
 Veja [operação no Render](docs/implantacao.md) e o
