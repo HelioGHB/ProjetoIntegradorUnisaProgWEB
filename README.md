@@ -4,7 +4,7 @@ Projeto independente de **Sistema de Gerenciamento de Chamados Técnicos**.
 Aplicação para abrir, atribuir e acompanhar chamados de suporte,
 com acesso separado para administrador, técnico e solicitante.
 
-**Novo endereço (migração em andamento; aguarda configuração do banco):** [sigetec-chamados.onrender.com](https://sigetec-chamados.onrender.com)
+**Sistema online:** [sigetec-chamados.onrender.com](https://sigetec-chamados.onrender.com)
 · **[Entrar](https://sigetec-chamados.onrender.com/login)**
 · **[Roteiro de apresentação](docs/apresentacao.md)**
 · **[Relatório de entrega e validação](docs/entrega.md)**

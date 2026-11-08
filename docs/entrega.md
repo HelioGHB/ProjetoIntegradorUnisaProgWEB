@@ -1,4 +1,4 @@
-> Migração de endereço em andamento: o novo serviço ainda aguarda configuração e validação online.
+> Novo endereço validado em 8/11/2026: saúde do banco e login responderam HTTP 200.
 > As validações anteriores se referem à instância original. Veja [migração](migracao-endereco.md).
 
 # Relatório de entrega — 7 de novembro de 2026

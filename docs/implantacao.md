@@ -1,5 +1,5 @@
-> Migração de endereço em 8/11/2026: novo serviço criado no plano Free.
-> A URL abaixo ainda aguarda configuração de DATABASE_URL e SECRET_KEY e validação online.
+> Migração de endereço em 8/11/2026: novo serviço no plano Free, com deploy Live.
+> A URL abaixo foi validada com /healthz e /login HTTP 200.
 > Consulte [a etapa de migração](migracao-endereco.md).
 
 # Operação do SIGETEC no Render

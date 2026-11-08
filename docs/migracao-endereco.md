@@ -2,7 +2,9 @@
 
 Novo serviço: `sigetec-chamados`, plano Free, região Virginia.
 URL atribuída: https://sigetec-chamados.onrender.com.
-Estado: criado; aguarda configuração privada e validação. Atribuir uma URL não significa que a aplicação está pronta.
+Estado em 8/11/2026: deploy Live, /healthz HTTP 200 com status ok (inclui consulta ao banco e à tabela de usuários), /login HTTP 200, rodapé sem identificação institucional e /usuarios sem sessão encaminhando ao login. Login autenticado com conta existente ainda requer conferência do responsável. O serviço antigo permanece ativo.
+
+Etapas executadas para configurar o ambiente e etapa final de desativação:
 
 1. No [ambiente do serviço antigo](https://dashboard.render.com/web/srv-dbn2dotbedkc73a2i1d0/env), copie somente os valores de `DATABASE_URL` e `SECRET_KEY`.
 2. No [ambiente do novo serviço](https://dashboard.render.com/web/srv-dbo8549srm7s73b7o350/env), adicione essas duas variáveis com os mesmos valores. Não compartilhe os valores no chat, Git ou documentação.
