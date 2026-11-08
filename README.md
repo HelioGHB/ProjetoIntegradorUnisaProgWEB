@@ -1,7 +1,7 @@
 # SIGETEC — Sistema de Gerenciamento de Chamados Técnicos
 
-Projeto Integrador do curso de **Análise e Desenvolvimento de Sistemas da UNISA**.
-Aplicação acadêmica para abrir, atribuir e acompanhar chamados de suporte,
+Projeto independente de **Sistema de Gerenciamento de Chamados Técnicos**.
+Aplicação para abrir, atribuir e acompanhar chamados de suporte,
 com acesso separado para administrador, técnico e solicitante.
 
 **Sistema online:** [sigetec-unisa.onrender.com](https://sigetec-unisa.onrender.com)

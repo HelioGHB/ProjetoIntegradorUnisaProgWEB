@@ -23,7 +23,7 @@ Este roteiro apresenta somente recursos implementados e testados.
 
 | Tempo | Mostrar | Fala sugerida |
 | --- | --- | --- |
-| 0:00–0:45 | Página inicial | “Este é o SIGETEC, Sistema de Gerenciamento de Chamados Técnicos, desenvolvido como Projeto Integrador de ADS da UNISA.” |
+| 0:00–0:45 | Página inicial | “Este é o SIGETEC, Sistema de Gerenciamento de Chamados Técnicos, desenvolvido como projeto independente.” |
 | 0:45–1:30 | Problema e objetivo | “O objetivo é organizar solicitações de suporte, indicar um responsável e permitir que o solicitante acompanhe o atendimento.” |
 | 1:30–2:15 | README ou estrutura | “Usei Flask no backend, SQLAlchemy no acesso aos dados e HTML/CSS na interface. Localmente o projeto usa SQLite; na hospedagem usa PostgreSQL.” |
 | 2:15–6:15 | Demonstração abaixo | “Vou demonstrar o mesmo chamado passando pelos três perfis, com permissões diferentes.” |

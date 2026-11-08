@@ -2,7 +2,7 @@
 # O banco é criado separadamente; confirme plano e custos antes.
 services:
   - type: web
-    name: sigetec-unisa
+    name: sigetec-chamados
     runtime: python
     plan: free
     region: virginia
