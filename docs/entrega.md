@@ -1,9 +1,12 @@
+> Migração de endereço em andamento: o novo serviço ainda aguarda configuração e validação online.
+> As validações anteriores se referem à instância original. Veja [migração](migracao-endereco.md).
+
 # Relatório de entrega — 7 de novembro de 2026
 
 ## Estado funcional
 
 - Código publicado em https://github.com/HelioGHB/ProjetoIntegradorUnisaProgWEB.
-- Aplicação em https://sigetec-unisa.onrender.com, serviço `sigetec-unisa`.
+- Aplicação em https://sigetec-chamados.onrender.com, serviço `sigetec-chamados`.
 - Fase funcional 4, commit `bbb5549`, confirmada Live pelo Render.
 - PostgreSQL hospedado e primeiro administrador inicializados; logs de criação
   foram confirmados. Contas fictícias de técnico e solicitante foram cadastradas

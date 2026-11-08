@@ -1,3 +1,6 @@
+> Migração de endereço em andamento: o novo serviço ainda aguarda configuração e validação online.
+> As validações anteriores se referem à instância original. Veja [migração](migracao-endereco.md).
+
 # Roteiro de apresentação do SIGETEC
 
 Duração sugerida: **8–10 minutos**, adaptável ao tempo definido pelo professor.
@@ -5,7 +8,7 @@ Este roteiro apresenta somente recursos implementados e testados.
 
 ## Antes da apresentação
 
-- Abra https://sigetec-unisa.onrender.com e confira `/healthz`.
+- Abra https://sigetec-chamados.onrender.com e confira `/healthz`.
 - Tenha acesso privado às contas de administrador, técnico e solicitante já
   cadastradas. Não mostre senhas, variáveis do Render ou arquivos `.env`.
 - Use **Sair** ao trocar de perfil, ou três perfis separados de navegador.

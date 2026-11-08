@@ -1,7 +1,10 @@
-# Inicializar o PostgreSQL do sigetec-unisa sem Shell
+> Migração de endereço em andamento: o novo serviço ainda aguarda configuração e validação online.
+> As validações anteriores se referem à instância original. Veja [migração](migracao-endereco.md).
 
-Serviço informado pelo responsável: **sigetec-unisa**, já com status Live.
-URL: https://sigetec-unisa.onrender.com
+# Inicializar o PostgreSQL do sigetec-chamados sem Shell
+
+Serviço informado pelo responsável: **sigetec-chamados**, já com status Live.
+URL: https://sigetec-chamados.onrender.com
 
 **Estado atual:** a inicialização e o primeiro login já foram concluídos e
 validados. As flags foram desativadas e os três valores temporários de cadastro
@@ -46,7 +49,7 @@ não imprimem conexão, nome, e-mail, senha ou hash do administrador.
 
 ## 1. Confirmar o destino
 
-No painel Render, abra o serviço **já existente** `sigetec-unisa`.
+No painel Render, abra o serviço **já existente** `sigetec-chamados`.
 Confirme privadamente que `DATABASE_URL` aponta para o PostgreSQL hospedado
 correto. Não copie seu valor para o repositório, comandos, prints ou mensagens.
 
@@ -131,9 +134,9 @@ redefinição de contas para contornar a falha.
 
 Confirme:
 
-1. https://sigetec-unisa.onrender.com/healthz — esperado: HTTP 200 e
+1. https://sigetec-chamados.onrender.com/healthz — esperado: HTTP 200 e
    `{"status":"ok"}`.
-2. https://sigetec-unisa.onrender.com/login — entre com o e-mail e senha escolhidos.
+2. https://sigetec-chamados.onrender.com/login — entre com o e-mail e senha escolhidos.
 3. Verifique que a página de chamados mostra o perfil **administrador**.
 
 O health check sozinho confirma conexão e tabela de usuários, mas não prova

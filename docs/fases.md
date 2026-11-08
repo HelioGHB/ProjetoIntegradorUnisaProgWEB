@@ -1,3 +1,6 @@
+> Migração de endereço em andamento: o novo serviço ainda aguarda configuração e validação online.
+> As validações anteriores se referem à instância original. Veja [migração](migracao-endereco.md).
+
 # Fases e evidências de evolução do SIGETEC
 
 O reinício simplificado foi autorizado pelo responsável. Código anterior foi
@@ -23,7 +26,7 @@ responsável para os próximos commits, sem reescrever o histórico existente.
 
 - Repositório: https://github.com/HelioGHB/ProjetoIntegradorUnisaProgWEB
 - Histórico: https://github.com/HelioGHB/ProjetoIntegradorUnisaProgWEB/commits/main/
-- Serviço: `sigetec-unisa`, em https://sigetec-unisa.onrender.com.
+- Serviço: `sigetec-chamados`, em https://sigetec-chamados.onrender.com.
 - PostgreSQL separado do serviço web, na mesma região.
 
 Em 6/11/2026, os commits foram publicados usando autenticação do GitHub CLI,

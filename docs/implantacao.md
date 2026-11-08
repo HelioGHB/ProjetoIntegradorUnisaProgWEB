@@ -1,9 +1,13 @@
+> Migração de endereço em 8/11/2026: novo serviço criado no plano Free.
+> A URL abaixo ainda aguarda configuração de DATABASE_URL e SECRET_KEY e validação online.
+> Consulte [a etapa de migração](migracao-endereco.md).
+
 # Operação do SIGETEC no Render
 
 ## Instalação atual
 
-- Serviço existente: **sigetec-unisa**.
-- URL: https://sigetec-unisa.onrender.com.
+- Serviço existente: **sigetec-chamados**.
+- URL: https://sigetec-chamados.onrender.com.
 - Fonte: branch `main` de https://github.com/HelioGHB/ProjetoIntegradorUnisaProgWEB.
 - Execução: Flask/Gunicorn, com PostgreSQL hospedado separado, na mesma região.
 - Planos existentes preservados; nenhum serviço adicional é necessário.
