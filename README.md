@@ -13,14 +13,14 @@ com acesso separado para administrador, técnico e solicitante.
 
 1. Abra **[sigetec-chamados.onrender.com](https://sigetec-chamados.onrender.com)** no navegador, sem instalar o projeto.
 2. Clique em **Entrar**, ou acesse diretamente a [tela de login](https://sigetec-chamados.onrender.com/login).
-3. Informe o **e-mail e a senha fornecidos pelo responsável pelo projeto** e clique em **Entrar**. Após autenticar, será exibida a lista de chamados disponível para seu perfil.
+3. Informe o **e-mail e a senha fictícios indicados no PDF da documentação do projeto** e clique em **Entrar**. Após autenticar, será exibida a lista de chamados disponível para seu perfil.
 4. Para trocar de conta ou encerrar a sessão, clique em **Sair**.
 
-**Não possui acesso?** Solicite ao responsável uma conta de teste e informe qual
-perfil deseja avaliar: solicitante, técnico ou administrador. Não existe cadastro
-público nem senha padrão. As credenciais online são compartilhadas em canal
-privado; as contas `@example.com` descritas adiante funcionam somente na
-[demonstração local](#executar-localmente-sem-docker-ou-postgresql), após sua preparação.
+**As contas de acesso e senhas fictícias para acessar o sistema estão no PDF
+da documentação do projeto.** Consulte esse documento para testar os perfis de
+solicitante, técnico e administrador. Se não tiver o PDF ou precisar de ajuda
+com o acesso, solicite ao responsável pelo projeto. Não existe cadastro público
+nem senha padrão no código.
 
 A hospedagem gratuita pode levar cerca de um minuto para responder no primeiro
 acesso após um período sem uso. Aguarde o carregamento. Se o login for recusado,
@@ -135,9 +135,13 @@ local, as três contas fictícias usam essa senha escolhida:
 
 | E-mail local | Perfil |
 | --- | --- |
-| admin@example.com | Administrador |
-| tecnico@example.com | Técnico |
-| solicitante@example.com | Solicitante |
+| admin@exemplo.com | Administrador |
+| tecnico@exemplo.com | Técnico |
+| solicitante@exemplo.com | Solicitante |
+
+Os endereços da tabela são exemplos de identificação. O comando
+`preparar-demo` atualmente cria `admin@example.com`, `tecnico@example.com` e
+`solicitante@example.com`; use esses e-mails ao executar a demonstração local.
 
 **Não há senha padrão no código.** Esse quadro se refere à demonstração local,
 não aos acessos da hospedagem. O comando recusa modificar contas se já houver
@@ -236,21 +240,6 @@ python -m pip install -r requirements-dev.txt
 python -m pytest -q
 python -m pip check
 ```
-
-Em **7/11/2026**, os **69 testes passaram** em SQLite em memória, com CSRF e
-chaves estrangeiras habilitados. Cobrem autenticação, integridade, bootstrap,
-perfis, usuários, privacidade e o ciclo de atendimento.
-Também houve verificação anterior de transações, rollback e concorrência em
-PostgreSQL temporário isolado. A captura em navegador percorreu login e páginas
-autenticadas numa instância temporária com dados fictícios.
-
-Em **8/11/2026**, o novo serviço `sigetec-chamados` foi confirmado **Live**.
-`/healthz` respondeu HTTP 200 com consulta ao banco e à tabela de usuários;
-`/login` respondeu HTTP 200 com rodapé sem identificação institucional, e
-`/usuarios` sem sessão encaminhou ao login. O login autenticado no novo endereço
-ainda precisa de conferência pelo responsável. Na instância anterior, o
-responsável relatou sucesso no fluxo completo com as contas cadastradas.
-As capturas e os testes automatizados não modificam o PostgreSQL hospedado.
 
 ## Entrega, GitHub e hospedagem
 
